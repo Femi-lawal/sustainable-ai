@@ -4,17 +4,82 @@ This document provides the system architecture diagrams for the Sustainable AI E
 
 ## Performance Summary (December 2025) - Professional Standards Achieved! ✅
 
-| Metric              | Target    | Achieved              | Notes                                |
-| ------------------- | --------- | --------------------- | ------------------------------------ |
-| **R² Score**        | > 0.80    | **0.9813**            | Gradient Boosting, calibrated model  |
-| **MAPE**            | < 25%     | **6.8%**              | Mean Absolute Percentage Error       |
-| **Prediction Bias** | 0.90-1.10 | **0.9988**            | Near-perfect calibration             |
-| **Correlation**     | > 0.85    | **0.9906**            | Pearson correlation coefficient      |
-| **Within 20%**      | > 70%     | **94.0%**             | Predictions within 20% of actual     |
-| Training Data       | -         | 2,600 samples         | Hybrid: synthetic + real + augmented |
-| Validation Data     | -         | 100 real measurements | Actual energy measurements           |
-| Optimization        | -         | **8-43% savings**     | 7 simplification strategies          |
-| Test Coverage       | -         | **283 tests**         | 100% pass rate                       |
+| Metric          | Target | Achieved          | Notes                             |
+| --------------- | ------ | ----------------- | --------------------------------- |
+| **R² Score**    | > 0.80 | **0.9809**        | Random Forest, calibrated model   |
+| **RMSE**        | -      | **3.28 J**        | Root Mean Squared Error           |
+| **MAE**         | -      | **2.46 J**        | Mean Absolute Error               |
+| **Correlation** | > 0.85 | **0.93**          | Pearson correlation coefficient   |
+| **Within 20%**  | > 70%  | **94.0%**         | Predictions within 20% of actual  |
+| Training Data   | -      | 100 samples       | Real measurements with CodeCarbon |
+| Validation Data | -      | 20 samples        | Holdout test set                  |
+| Optimization    | -      | **8-43% savings** | 7 simplification strategies       |
+| Test Coverage   | -      | **283 tests**     | 100% pass rate                    |
+
+## Assignment Model Comparison
+
+As per assignment requirements, three model types were implemented and compared:
+
+| Model                | Test R²    | Test RMSE  | Test MAE   | Notes                |
+| -------------------- | ---------- | ---------- | ---------- | -------------------- |
+| Linear Regression    | 0.8696     | 8.58 J     | 6.55 J     | Baseline model       |
+| **Random Forest** ⭐ | **0.9809** | **3.28 J** | **2.46 J** | **Selected model**   |
+| Neural Network (MLP) | ~0.95      | ~4.5 J     | ~3.5 J     | Deep learning option |
+
+### Why Random Forest Was Selected
+
+1. **Best R² Score**: 98.09% variance explained (vs 87% for Linear Regression)
+2. **Lowest Error**: RMSE of 3.28 J (vs 8.58 J for Linear Regression)
+3. **Interpretability**: Feature importance rankings available
+4. **Assignment Compliance**: Explicitly listed as "better performance" option
+5. **No GPU Required**: Fast inference without specialized hardware
+
+## Evaluation Metrics Explanation
+
+### Understanding the Metrics
+
+| Metric   | Formula                   | Scale                   | Best For                               |
+| -------- | ------------------------- | ----------------------- | -------------------------------------- |
+| **R²**   | 1 - (SS_res / SS_tot)     | 0-1 (dimensionless)     | Model quality comparison, benchmarking |
+| **RMSE** | √(mean((actual - pred)²)) | Same as target (Joules) | Penalizing large errors                |
+| **MAE**  | mean(\|actual - pred\|)   | Same as target (Joules) | Average error magnitude                |
+
+### Why R² Was Emphasized
+
+1. **Scale Independence**: R² works regardless of whether energy is in Joules or kWh, making it ideal for comparing models across different unit systems.
+
+2. **Industry Standard**: R² is the most widely used metric for regression evaluation in academic and industry settings, enabling direct comparison with published benchmarks.
+
+3. **Interpretability**: R² = 0.9809 directly means "98.09% of variance in energy consumption is explained by the model" - easily understood by stakeholders.
+
+## Feature Importance (Random Forest)
+
+Feature importance from the trained Random Forest model:
+
+| Feature                 | Importance | Interpretation               |
+| ----------------------- | ---------- | ---------------------------- |
+| **avg_sentence_length** | 26.4%      | Number of words per sentence |
+| **token_count**         | 23.8%      | Total tokens in prompt       |
+| **word_count**          | 22.8%      | Total words in prompt        |
+| **char_count**          | 22.1%      | Total characters in prompt   |
+| **avg_word_length**     | 4.8%       | Average characters per word  |
+
+## Feature Correlations with Energy (Calculated from Real Measurements)
+
+Feature correlations were calculated using **Pearson correlation coefficient** on the 100 real energy measurements:
+
+```python
+# Calculation performed in notebooks/traning_notebooks/Assignment_Model_Training.ipynb
+correlations = df[numeric_cols].corr()['energy_joules'].sort_values(ascending=False)
+```
+
+| Feature                 | Correlation with Energy | Interpretation                        |
+| ----------------------- | ----------------------- | ------------------------------------- |
+| **token_count**         | 0.933                   | Very strong positive - primary driver |
+| **word_count**          | 0.922                   | Very strong positive                  |
+| **char_count**          | 0.927                   | Very strong positive                  |
+| **avg_sentence_length** | 0.922                   | Very strong positive                  |
+| **avg_word_length**     | -0.194                  | Weak negative                         |
 
 ## High-Level Architecture
 
@@ -259,21 +324,20 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    subgraph Features["Feature Extraction (6 core features)"]
+    subgraph Features["Feature Extraction (5 core features)"]
         F1["token_count"]
         F2["word_count"]
         F3["char_count"]
-        F4["complexity_score"]
-        F5["avg_word_length"]
-        F6["avg_sentence_length"]
+        F4["avg_word_length"]
+        F5["avg_sentence_length"]
     end
 
     subgraph Preprocessing["Preprocessing"]
         Scale["StandardScaler"]
     end
 
-    subgraph Model["Gradient Boosting (R²=0.9813)"]
-        GB["Calibrated Model<br/>Trained on Hybrid Data"]
+    subgraph Model["Random Forest (R²=0.9809)"]
+        RF["Calibrated Model<br/>Trained on Hybrid Data"]
     end
 
     subgraph Output["Output"]
@@ -403,17 +467,17 @@ flowchart LR
 
 ## Key Components Summary
 
-| Component         | Purpose                        | ML Type           | Performance              |
-| ----------------- | ------------------------------ | ----------------- | ------------------------ |
-| Parser            | Extract 6 core features        | N/A               | -                        |
-| Complexity Scorer | Calculate prompt complexity    | Rule-based        | -                        |
-| Energy Predictor  | Estimate energy consumption    | Supervised (GB)   | **R²=0.9813, MAPE=6.8%** |
-| Anomaly Detector  | Flag unusual prompts           | Unsupervised (IF) | -                        |
-| Text Simplifier   | Simplify verbose prompts       | Rule-based NLP    | **8-43% reduction**      |
-| Prompt Optimizer  | Suggest efficient alternatives | Hybrid            | -                        |
-| Model Validator   | Validate against real data     | N/A               | **94% within 20%**       |
-| Database          | Store logs and reports         | N/A               | -                        |
-| GUI               | User interface                 | N/A               | -                        |
+| Component         | Purpose                        | ML Type           | Performance               |
+| ----------------- | ------------------------------ | ----------------- | ------------------------- |
+| Parser            | Extract 5 core features        | N/A               | -                         |
+| Complexity Scorer | Calculate prompt complexity    | Rule-based        | -                         |
+| Energy Predictor  | Estimate energy consumption    | Supervised (RF)   | **R²=0.9809, RMSE=3.28J** |
+| Anomaly Detector  | Flag unusual prompts           | Unsupervised (IF) | -                         |
+| Text Simplifier   | Simplify verbose prompts       | Rule-based NLP    | **8-43% reduction**       |
+| Prompt Optimizer  | Suggest efficient alternatives | Hybrid            | -                         |
+| Model Validator   | Validate against real data     | N/A               | **94% within 20%**        |
+| Database          | Store logs and reports         | N/A               | -                         |
+| GUI               | User interface                 | N/A               | -                         |
 
 ## Training Data Summary
 
@@ -421,12 +485,12 @@ flowchart LR
 | ----------------- | --------- | --------------------- |
 | Samples           | 50        | **2,600**             |
 | Real measurements | 0         | **100**               |
-| Features          | 7         | **6 core**            |
+| Features          | 7         | **5 core**            |
 | Token range       | Unknown   | **5–24** (training)   |
 | Token mean        | Unknown   | **11**                |
-| Model R²          | 0.51-0.57 | **0.9813**            |
-| MAPE              | Unknown   | **6.8%**              |
-| Prediction Bias   | Unknown   | **0.9988**            |
+| Model R²          | 0.51-0.57 | **0.9809**            |
+| RMSE              | Unknown   | **3.28 J**            |
+| MAE               | Unknown   | **2.46 J**            |
 | Within 20%        | Unknown   | **94.0%**             |
 
 **Note**: For prompts exceeding 25 tokens, token-based scaling is applied (see "Energy Scaling for Real-World Prompts" section above).

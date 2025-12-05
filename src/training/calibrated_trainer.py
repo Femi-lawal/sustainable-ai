@@ -453,13 +453,17 @@ class CalibratedModelTrainer:
         print("SAVING CALIBRATED MODEL")
         print("="*60)
         
-        # Save model
-        model_path = self.output_dir / "calibrated_energy_model.joblib"
+        # Create energy_predictor subdirectory
+        model_dir = self.output_dir / "energy_predictor"
+        model_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save model with energy_predictor naming
+        model_path = model_dir / "energy_predictor.joblib"
         joblib.dump(model, model_path)
         print(f"  Model saved to: {model_path}")
         
         # Save scaler
-        scaler_path = self.output_dir / "calibrated_scaler.joblib"
+        scaler_path = model_dir / "scaler.joblib"
         joblib.dump(scaler, scaler_path)
         print(f"  Scaler saved to: {scaler_path}")
         
@@ -472,13 +476,13 @@ class CalibratedModelTrainer:
             **metrics
         }
         
-        info_path = self.output_dir / "calibration_info.joblib"
+        info_path = model_dir / "calibration_info.joblib"
         joblib.dump(calibration_info, info_path)
         print(f"  Calibration info saved to: {info_path}")
         
         # Also save as CSV for human readability
         info_df = pd.DataFrame([calibration_info])
-        info_csv_path = self.output_dir / "calibration_info.csv"
+        info_csv_path = model_dir / "calibration_info.csv"
         info_df.to_csv(info_csv_path, index=False)
         print(f"  Calibration CSV saved to: {info_csv_path}")
         

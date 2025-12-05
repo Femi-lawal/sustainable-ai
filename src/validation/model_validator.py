@@ -227,12 +227,12 @@ class ModelValidator:
         if self.is_calibrated:
             import joblib
             from nlp.parser import parse_prompt
-            from nlp.complexity_score import compute_complexity
             
-            model = joblib.load(self.model_dir / "calibrated_energy_model.joblib")
-            scaler = joblib.load(self.model_dir / "calibrated_scaler.joblib")
+            model = joblib.load(self.model_dir / "energy_predictor" / "energy_predictor.joblib")
+            scaler = joblib.load(self.model_dir / "energy_predictor" / "scaler.joblib")
+            # 5 features (no complexity_score - it was constant in real data)
             feature_cols = ['token_count', 'word_count', 'char_count', 
-                           'complexity_score', 'avg_word_length', 'avg_sentence_length']
+                           'avg_word_length', 'avg_sentence_length']
             
             for idx, row in self.real_data.iterrows():
                 prompt = row['prompt']
@@ -240,13 +240,11 @@ class ModelValidator:
                 
                 try:
                     parsed = parse_prompt(prompt, use_embeddings=False)
-                    complexity = compute_complexity(prompt)
                     
                     features = pd.DataFrame([{
                         'token_count': parsed.token_count,
                         'word_count': parsed.word_count,
                         'char_count': parsed.char_count,
-                        'complexity_score': complexity,
                         'avg_word_length': parsed.avg_word_length,
                         'avg_sentence_length': parsed.avg_sentence_length,
                     }])[feature_cols].values

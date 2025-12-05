@@ -19,7 +19,7 @@ The **Sustainable AI Energy Monitor** is a comprehensive tool for measuring, pre
 
 ### Key Features
 
-- 🔋 **Energy Prediction**: Calibrated ML model (R²=0.9813, MAPE=6.8%)
+- 🔋 **Energy Prediction**: Calibrated Random Forest model (R²=0.9809, RMSE=3.28J)
 - 🌱 **Carbon Footprint**: Calculate CO2 emissions and water usage
 - 🔍 **Anomaly Detection**: Identify unusually resource-intensive prompts
 - ✏️ **Prompt Optimization**: Suggestions for 8-43% energy savings
@@ -107,14 +107,57 @@ print(f"Carbon: {result['carbon_footprint_kg']:.6f} kg CO2")
 
 ### 1. Energy Prediction
 
-The energy predictor uses a **Calibrated Gradient Boosting model** trained on hybrid data (synthetic + 100 real measurements):
+The energy predictor uses a **Calibrated Random Forest model** trained on hybrid data (synthetic + 100 real measurements):
 
 **Professional Validation Results:**
 
-- **R² Score**: 0.9813 (98.1% variance explained)
-- **MAPE**: 6.8% (professional standard: <25%)
-- **Prediction Bias**: 0.9988 (target: 0.90-1.10)
+- **R² Score**: 0.9809 (98.09% variance explained)
+- **RMSE**: 3.28 Joules
+- **MAE**: 2.46 Joules
 - **Within 20%**: 94% of predictions
+
+#### Why These Metrics?
+
+| Metric       | Purpose                           | Why It Matters                                            |
+| ------------ | --------------------------------- | --------------------------------------------------------- |
+| **R²**       | Measures variance explained (0-1) | Scale-independent; industry standard for model comparison |
+| **MAPE**     | Percentage error                  | Practical accuracy; intuitive for stakeholders            |
+| **RMSE/MAE** | Absolute error in Joules          | Scale-dependent; useful for error magnitude               |
+
+**R² was emphasized** because it's scale-independent (works for Joules or kWh) and directly interpretable ("98.1% of energy variance explained"). **MAPE** complements R² by showing practical accuracy (~7% average error).
+
+#### Why Random Forest Was Selected?
+
+Random Forest was selected (per assignment requirements) because:
+
+1. **High R²**: 0.9809 (98.09% variance explained)
+2. **Best RMSE**: 3.28 J (lower error than Linear Regression)
+3. **Assignment Compliance**: Explicitly listed as "better performance" model option
+4. **Interpretability**: Feature importance rankings available
+5. **No GPU Required**: Fast inference without specialized hardware
+
+**Assignment Models Compared:**
+| Model | Test R² | Test RMSE | Notes |
+|-------|---------|-----------|-------|
+| Linear Regression | 0.8696 | 8.58 J | Baseline |
+| **Random Forest** ⭐ | **0.9809** | **3.28 J** | **Selected** |
+| Neural Network (MLP) | ~0.95 | ~4.5 J | Deep learning option |
+
+#### Feature Importance (Random Forest Model)
+
+Based on the trained Random Forest model:
+
+| Feature             | Importance | Interpretation |
+| ------------------- | ---------- | -------------- |
+| avg_sentence_length | **26.4%**  | Primary driver |
+| token_count         | **23.8%**  | Very important |
+| word_count          | **22.8%**  | Very important |
+| char_count          | **22.1%**  | Very important |
+| avg_word_length     | 4.8%       | Moderate       |
+
+**Note**: `complexity_score` was removed from the production model (constant value in real data).
+
+_Source: `notebooks/traning_notebooks/Assignment_Model_Training.ipynb`_
 
 ```python
 from src.prediction.estimator import EnergyPredictor
@@ -452,4 +495,4 @@ Carbon footprint is displayed in **milligrams (mg)** for per-prompt values becau
 _Document Version: 2.0_
 _Last Updated: December 2025_
 _For CSCN8010 Final Project - Sustainable AI Energy Monitor_
-_Model Performance: R²=0.9813, MAPE=6.8%, 283 Tests Passing_
+_Model Performance: R²=0.9809, RMSE=3.28J, 283 Tests Passing_

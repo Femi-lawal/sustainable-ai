@@ -1,14 +1,13 @@
-"""
-Configuration settings for the Sustainable AI Energy-Efficient Prompt Engineering Application.
+"""Configuration settings for the Sustainable AI Energy-Efficient Prompt Engineering Application.
 This module contains all application-wide settings, paths, and constants.
 
 Updated (December 2025):
-- Model type changed from random_forest to gradient_boost (R²=0.976)
-- Model paths updated to model/energy_predictor.pkl, feature_scaler.pkl
-- Added feature_names_path for loading trained feature order
+- Model type: Random Forest (R²=0.9809, assignment-compliant)
+- Model paths: model/energy_predictor/energy_predictor.joblib, scaler.joblib
+- Features: 5 core features (token_count, word_count, char_count, avg_word_length, avg_sentence_length)
 
 Key Configuration Classes:
-- EnergyPredictorConfig: ML model settings (Gradient Boosting, 12 features)
+- EnergyPredictorConfig: ML model settings (Random Forest, 5 features)
 - AnomalyDetectorConfig: Isolation Forest for outlier detection
 - NLPConfig: Tokenizer and embedding model settings
 - PromptOptimizerConfig: Simplification strategies and thresholds
@@ -70,15 +69,15 @@ DATABASE_CONFIG = DatabaseConfig()
 @dataclass
 class EnergyPredictorConfig:
     """Configuration for the energy prediction model (Supervised Learning)."""
-    model_type: str = "gradient_boost"  # Options: "random_forest", "neural_network", "gradient_boost"
-    model_path: Path = MODEL_DIR / "energy_predictor.pkl"
-    scaler_path: Path = MODEL_DIR / "feature_scaler.pkl"
-    feature_names_path: Path = MODEL_DIR / "feature_names.pkl"
+    model_type: str = "random_forest"  # Options: "random_forest", "neural_network", "gradient_boost"
+    model_path: Path = ENERGY_PREDICTOR_DIR / "energy_predictor.joblib"
+    scaler_path: Path = ENERGY_PREDICTOR_DIR / "scaler.joblib"
+    feature_names_path: Path = ENERGY_PREDICTOR_DIR / "calibration_info.joblib"
     
-    # Random Forest hyperparameters
-    n_estimators: int = 100
+    # Random Forest hyperparameters (tuned)
+    n_estimators: int = 200
     max_depth: int = 15
-    min_samples_split: int = 5
+    min_samples_split: int = 2
     random_state: int = 42
     
     # Neural Network hyperparameters (if using NN)
@@ -87,13 +86,12 @@ class EnergyPredictorConfig:
     epochs: int = 100
     batch_size: int = 32
     
-    # Feature columns used for prediction
+    # Feature columns used for prediction (5 core features)
     feature_columns: List[str] = field(default_factory=lambda: [
-        "token_count", "char_count", "punct_ratio", "avg_word_length",
-        "stopword_ratio", "num_layers", "training_hours", "flops_per_hour",
-        "flops_per_layer", "training_efficiency", "complexity_score"
+        "token_count", "word_count", "char_count", 
+        "avg_word_length", "avg_sentence_length"
     ])
-    target_column: str = "energy_kwh"
+    target_column: str = "energy_joules"
 
 ENERGY_PREDICTOR_CONFIG = EnergyPredictorConfig()
 

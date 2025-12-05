@@ -485,13 +485,17 @@ class PrecisionCalibratedTrainer:
         print("SAVING PRECISION MODEL")
         print("="*60)
         
-        # Save model (overwrite calibrated model)
-        model_path = self.output_dir / "calibrated_energy_model.joblib"
+        # Create energy_predictor subdirectory
+        model_dir = self.output_dir / "energy_predictor"
+        model_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save model with energy_predictor naming
+        model_path = model_dir / "energy_predictor.joblib"
         joblib.dump(model, model_path)
         print(f"  Model saved to: {model_path}")
         
         # Save scaler
-        scaler_path = self.output_dir / "calibrated_scaler.joblib"
+        scaler_path = model_dir / "scaler.joblib"
         joblib.dump(scaler, scaler_path)
         print(f"  Scaler saved to: {scaler_path}")
         
@@ -507,7 +511,7 @@ class PrecisionCalibratedTrainer:
             **metrics
         }
         
-        info_path = self.output_dir / "calibration_info.joblib"
+        info_path = model_dir / "calibration_info.joblib"
         joblib.dump(calibration_info, info_path)
         print(f"  Calibration info saved to: {info_path}")
         

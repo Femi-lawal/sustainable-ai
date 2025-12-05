@@ -63,21 +63,22 @@ class TestEnergyPredictorConfig:
     def test_energy_predictor_config_defaults(self):
         """Test default EnergyPredictorConfig values."""
         from utils.config import ENERGY_PREDICTOR_CONFIG
-        assert ENERGY_PREDICTOR_CONFIG.model_type == "gradient_boost"
-        assert ENERGY_PREDICTOR_CONFIG.n_estimators == 100
+        assert ENERGY_PREDICTOR_CONFIG.model_type == "random_forest"
+        assert ENERGY_PREDICTOR_CONFIG.n_estimators == 200
         assert ENERGY_PREDICTOR_CONFIG.random_state == 42
     
     def test_energy_predictor_feature_columns(self):
-        """Test feature columns list."""
+        """Test feature columns list (5 core features)."""
         from utils.config import ENERGY_PREDICTOR_CONFIG
-        assert len(ENERGY_PREDICTOR_CONFIG.feature_columns) > 5
+        assert len(ENERGY_PREDICTOR_CONFIG.feature_columns) == 5
         assert "token_count" in ENERGY_PREDICTOR_CONFIG.feature_columns
-        assert "complexity_score" in ENERGY_PREDICTOR_CONFIG.feature_columns
+        assert "word_count" in ENERGY_PREDICTOR_CONFIG.feature_columns
+        assert "char_count" in ENERGY_PREDICTOR_CONFIG.feature_columns
     
     def test_energy_predictor_target_column(self):
         """Test target column."""
         from utils.config import ENERGY_PREDICTOR_CONFIG
-        assert ENERGY_PREDICTOR_CONFIG.target_column == "energy_kwh"
+        assert ENERGY_PREDICTOR_CONFIG.target_column == "energy_joules"
     
     def test_hidden_layers_is_list(self):
         """Test that hidden_layers is a list."""

@@ -1,0 +1,2 @@
+model_type,best_params,train_r2,test_r2,train_rmse,test_rmse,train_mae,test_mae,n_samples_train,n_samples_test,features
+RandomForestRegressor,"{'max_depth': 5, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 300}",0.976457947860964,0.9705572443080018,3.862249650823487,4.474632295546762,2.2406679542104104,2.541826250376328,2080,520,"['token_count', 'word_count', 'char_count', 'avg_word_length', 'avg_sentence_length']"

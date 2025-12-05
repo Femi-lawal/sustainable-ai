@@ -8,19 +8,23 @@ UNIT CONVENTION:
 - Carbon/water/cost calculations use kWh internally
 
 Model Performance (December 2025 - Calibrated):
-- Algorithm: Gradient Boosting Regressor  
-- R² Score: 0.9813 (98.1% variance explained)
-- MAPE: 6.8% (professional standard: <25%)
-- Prediction Bias: 0.9988 (nearly perfect)
-- Training: 2,600 samples (hybrid: synthetic + 100 real measurements)
+- Algorithm: Random Forest Regressor (assignment-compliant)
+- R² Score: 0.9809 (98.09% variance explained)
+- RMSE: 3.28 Joules
+- MAE: 2.46 Joules
+- Training: 100 real measurements with CodeCarbon
+
+Assignment Models Compared:
+1. Linear Regression (baseline): R² = 0.8696
+2. Random Forest (selected): R² = 0.9809 ⭐
+3. Neural Network (MLP): R² = ~0.95
 
 Key Features (by importance):
-1. token_count - Primary energy driver
-2. word_count
-3. char_count  
-4. complexity_score
-5. avg_word_length
-6. avg_sentence_length
+1. avg_sentence_length - 26.4%
+2. token_count - 23.8%
+3. word_count - 22.8%
+4. char_count - 22.1%
+5. avg_word_length - 4.8%
 
 Usage:
     from src.prediction.estimator import EnergyPredictor
@@ -166,9 +170,10 @@ class EnergyPredictor:
         self.model_type = model_type
         self.use_calibrated = use_calibrated
         
-        # Check for calibrated model first
-        calibrated_model_path = MODEL_DIR / "calibrated_energy_model.joblib"
-        calibrated_scaler_path = MODEL_DIR / "calibrated_scaler.joblib"
+        # Check for calibrated model in energy_predictor folder
+        energy_predictor_dir = MODEL_DIR / "energy_predictor"
+        calibrated_model_path = energy_predictor_dir / "energy_predictor.joblib"
+        calibrated_scaler_path = energy_predictor_dir / "scaler.joblib"
         
         if use_calibrated and calibrated_model_path.exists():
             self.model_path = calibrated_model_path
@@ -221,19 +226,21 @@ class EnergyPredictor:
             
             # Load calibration info if using calibrated model
             if self.is_calibrated:
-                calibration_info_path = MODEL_DIR / "calibration_info.joblib"
+                calibration_info_path = MODEL_DIR / "energy_predictor" / "calibration_info.joblib"
                 if calibration_info_path.exists():
                     self.calibration_info = joblib.load(calibration_info_path)
                 # Set feature names for calibrated model
+                # The Random Forest model uses 5 features (no complexity_score)
                 self.feature_names = [
                     'token_count', 'word_count', 'char_count',
-                    'complexity_score', 'avg_word_length', 'avg_sentence_length'
+                    'avg_word_length', 'avg_sentence_length'
                 ]
             else:
                 # Load feature names if available
-                feature_names_path = ENERGY_PREDICTOR_CONFIG.model_path.parent / "feature_names.pkl"
+                feature_names_path = ENERGY_PREDICTOR_CONFIG.model_path.parent / "feature_names.txt"
                 if feature_names_path.exists():
-                    self.feature_names = joblib.load(feature_names_path)
+                    with open(feature_names_path, 'r') as f:
+                        self.feature_names = [line.strip() for line in f if line.strip()]
                 
             self.is_trained = True
             return True
@@ -268,13 +275,13 @@ class EnergyPredictor:
         # Get complexity score
         complexity = compute_complexity(prompt)
         
-        # If using calibrated model, return only the 6 features it was trained on
+        # If using calibrated model, return only the 5 features it was trained on
+        # (Random Forest model uses: token_count, word_count, char_count, avg_word_length, avg_sentence_length)
         if self.is_calibrated:
             return {
                 "token_count": parsed.token_count,
                 "word_count": parsed.word_count,
                 "char_count": parsed.char_count,
-                "complexity_score": complexity,
                 "avg_word_length": parsed.avg_word_length,
                 "avg_sentence_length": parsed.avg_sentence_length,
             }

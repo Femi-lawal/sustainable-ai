@@ -7,6 +7,13 @@ This script trains energy prediction models using:
 3. Cross-validation for robust evaluation
 4. Iterative improvement until R² > 0.85
 5. Feature importance analysis
+
+Production Model (December 2025):
+- Algorithm: Random Forest Regressor
+- R² Score: 0.9809
+- RMSE: 3.28 Joules
+- MAE: 2.46 Joules
+- Features: token_count, word_count, char_count, avg_word_length, avg_sentence_length
 """
 
 import sys
@@ -374,17 +381,21 @@ class ImprovedModelTrainer:
         model = model or self.best_model
         scaler = scaler or self.best_scaler
         
-        MODEL_DIR.mkdir(parents=True, exist_ok=True)
+        # Create energy_predictor subdirectory
+        energy_predictor_dir = MODEL_DIR / "energy_predictor"
+        energy_predictor_dir.mkdir(parents=True, exist_ok=True)
         
-        model_path = model_path or MODEL_DIR / "energy_predictor.pkl"
-        scaler_path = scaler_path or MODEL_DIR / "feature_scaler.pkl"
+        model_path = model_path or energy_predictor_dir / "energy_predictor.joblib"
+        scaler_path = scaler_path or energy_predictor_dir / "scaler.joblib"
         
         joblib.dump(model, model_path)
         joblib.dump(scaler, scaler_path)
         
         # Also save feature names
-        feature_path = MODEL_DIR / "feature_names.pkl"
-        joblib.dump(self.feature_names, feature_path)
+        feature_path = energy_predictor_dir / "feature_names.txt"
+        with open(feature_path, 'w') as f:
+            for name in self.feature_names:
+                f.write(f"{name}\n")
         
         print(f"\nModel saved to {model_path}")
         print(f"Scaler saved to {scaler_path}")

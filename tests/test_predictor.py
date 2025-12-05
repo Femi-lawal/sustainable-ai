@@ -51,8 +51,9 @@ class TestEnergyPredictor:
         features = energy_predictor.extract_features(sample_prompts["medium"])
         assert isinstance(features, dict)
         assert "token_count" in features
-        assert "complexity_score" in features
+        # Note: calibrated Random Forest model uses 5 features (no complexity_score)
         assert "char_count" in features
+        assert "avg_word_length" in features
     
     def test_extract_features_with_model_params(self, energy_predictor, sample_prompts):
         """Test feature extraction with model parameters."""
@@ -62,12 +63,12 @@ class TestEnergyPredictor:
             training_hours=24.0,
             flops_per_hour=1e12
         )
-        # Calibrated model uses only 6 core features, original uses more
+        # Calibrated model uses only 5 core features (Random Forest), original uses more
         if getattr(energy_predictor, 'is_calibrated', False):
-            # Calibrated model: only core NLP features
+            # Calibrated model: only core NLP features (no complexity_score)
             assert "token_count" in features
             assert "word_count" in features
-            assert "complexity_score" in features
+            assert "avg_word_length" in features
             # Model params not included in calibrated features
         else:
             # Original model: includes model parameters
