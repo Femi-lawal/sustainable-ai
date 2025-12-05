@@ -1,0 +1,7 @@
+{
+  "question": "{topic}?",
+  "explanation": "Explain {topic} briefly.",
+  "comparison": "Compare {item1} and {item2}.",
+  "summary": "Summarize: {content}",
+  "list": "List 5 {items}."
+}

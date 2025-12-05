@@ -1,0 +1,26 @@
+{
+  "token_reduction": {
+    "max_tokens": 150,
+    "strategies": [
+      "remove_filler_words",
+      "consolidate_repeated_concepts",
+      "use_concise_phrasing"
+    ]
+  },
+  "complexity_reduction": {
+    "target_complexity": 0.5,
+    "strategies": [
+      "simplify_vocabulary",
+      "shorten_sentences",
+      "reduce_nesting"
+    ]
+  },
+  "energy_optimization": {
+    "target_efficiency": 0.8,
+    "strategies": [
+      "batch_similar_requests",
+      "cache_common_patterns",
+      "use_smaller_models_when_possible"
+    ]
+  }
+}

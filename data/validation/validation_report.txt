@@ -1,0 +1,27 @@
+
+============================================================
+MODEL VALIDATION REPORT
+============================================================
+
+Training Data: 500 synthetic samples
+Validation Data: 100 real measurements
+
+--- Error Metrics on Real Measurements ---
+MAE (Mean Absolute Error):     1.831023 Joules
+RMSE (Root Mean Squared Error): 3.451192 Joules
+MAPE (Mean Absolute % Error):   6.78%
+R² Score:                       0.9813
+
+--- Correlation ---
+Pearson Correlation:            0.9906
+
+--- Reference ---
+Synthetic Model R²:             0.9731
+Prediction Bias:                1.00x
+  (>1 = overpredicting, <1 = underpredicting)
+
+--- Interpretation ---
+[OK] Good correlation with real measurements (r > 0.6)
+[OK] Model predictions are well-calibrated (bias within +/-20%)
+[OK] Good prediction accuracy (MAPE < 20%)
+============================================================

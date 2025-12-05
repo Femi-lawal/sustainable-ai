@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.h5
+*.pt
+
+# Virtual environments
+venv/
+.env/
+env/
+*.egg-info/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data
+data/raw/
+data/processed/
+data/synthetic/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Optional: shell scripts (if you don’t want to version run.sh)
+run.sh

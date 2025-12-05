@@ -1,0 +1,8 @@
+token_count
+complexity_score
+char_count
+avg_word_length
+vocabulary_richness
+lexical_density
+token_to_word_ratio
+complexity_to_length_ratio

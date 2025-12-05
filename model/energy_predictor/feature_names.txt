@@ -1,0 +1,7 @@
+token_count
+word_count
+char_count
+avg_word_length
+complexity_score
+question_mark
+exclamation_mark

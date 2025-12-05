@@ -1,0 +1,16 @@
+{
+  "tokenizer": "distilbert-base-uncased",
+  "simplification_model": "t5-small",
+  "max_length": 512,
+  "complexity_thresholds": {
+    "simple": 0.3,
+    "moderate": 0.6,
+    "complex": 0.8
+  },
+  "simplification_strategies": [
+    "reduce_sentence_length",
+    "replace_complex_words",
+    "split_compound_sentences",
+    "remove_redundancy"
+  ]
+}

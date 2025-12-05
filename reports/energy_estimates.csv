@@ -1,0 +1,51 @@
+timestamp,prompt_id,prompt_preview,token_count,complexity_score,energy_kwh,carbon_footprint_kg,water_usage_liters,electricity_cost_usd,energy_level,region
+2025-01-15T09:00:00,001,"What is the capital of France?",10,0.15,0.124,0.052,0.223,0.019,low,california
+2025-01-15T09:05:23,002,"Explain quantum computing basics",18,0.42,0.287,0.120,0.517,0.043,low,california
+2025-01-15T09:12:45,003,"Write a Python sorting algorithm",25,0.38,0.312,0.131,0.562,0.047,low,california
+2025-01-15T09:18:12,004,"Summarize climate change effects",22,0.45,0.298,0.125,0.536,0.045,low,california
+2025-01-15T09:24:33,005,"Create a marketing strategy plan",35,0.62,0.521,0.219,0.938,0.078,medium,california
+2025-01-15T09:31:05,006,"Describe photosynthesis process",15,0.35,0.234,0.098,0.421,0.035,low,california
+2025-01-15T09:38:22,007,"Generate creative story about AI",42,0.58,0.487,0.205,0.877,0.073,medium,california
+2025-01-15T09:45:18,008,"Explain machine learning algorithms",28,0.52,0.389,0.163,0.700,0.058,medium,california
+2025-01-15T09:52:41,009,"Write comprehensive documentation",65,0.71,0.742,0.312,1.336,0.111,medium,california
+2025-01-15T10:00:05,010,"Design system architecture",48,0.68,0.612,0.257,1.102,0.092,medium,california
+2025-01-15T10:08:33,011,"Analyze financial data trends",38,0.55,0.445,0.187,0.801,0.067,medium,california
+2025-01-15T10:15:12,012,"Create detailed business proposal",78,0.78,0.923,0.388,1.661,0.138,high,california
+2025-01-15T10:24:45,013,"Explain transformer architecture",32,0.65,0.478,0.201,0.860,0.072,medium,california
+2025-01-15T10:32:18,014,"Write unit test documentation",45,0.48,0.412,0.173,0.742,0.062,medium,california
+2025-01-15T10:40:22,015,"Generate API specifications",52,0.58,0.534,0.224,0.961,0.080,medium,california
+2025-01-15T10:48:55,016,"Describe sustainable AI practices",28,0.52,0.365,0.153,0.657,0.055,medium,california
+2025-01-15T10:55:33,017,"Create database schema design",42,0.62,0.523,0.220,0.941,0.078,medium,california
+2025-01-15T11:02:15,018,"Explain reinforcement learning",35,0.58,0.432,0.181,0.778,0.065,medium,california
+2025-01-15T11:10:42,019,"Write security best practices",55,0.65,0.612,0.257,1.102,0.092,medium,california
+2025-01-15T11:18:28,020,"Generate code review guidelines",48,0.55,0.498,0.209,0.896,0.075,medium,california
+2025-01-15T11:25:55,021,"Analyze user behavior patterns",42,0.58,0.478,0.201,0.860,0.072,medium,california
+2025-01-15T11:33:12,022,"Create deployment checklist",38,0.45,0.398,0.167,0.716,0.060,medium,california
+2025-01-15T11:40:45,023,"Explain neural network layers",25,0.55,0.345,0.145,0.621,0.052,medium,california
+2025-01-15T11:48:22,024,"Design responsive UI layout",35,0.48,0.412,0.173,0.742,0.062,medium,california
+2025-01-15T11:55:55,025,"Write performance optimization",45,0.62,0.534,0.224,0.961,0.080,medium,california
+2025-01-15T12:03:18,026,"Generate project timeline",32,0.42,0.356,0.150,0.641,0.053,medium,california
+2025-01-15T12:10:45,027,"Explain gradient descent math",28,0.68,0.412,0.173,0.742,0.062,medium,california
+2025-01-15T12:18:22,028,"Create testing strategy doc",52,0.55,0.523,0.220,0.941,0.078,medium,california
+2025-01-15T12:25:55,029,"Analyze carbon footprint data",38,0.52,0.434,0.182,0.781,0.065,medium,california
+2025-01-15T12:33:28,030,"Design microservices architecture",68,0.75,0.812,0.341,1.462,0.122,high,california
+2025-01-15T12:42:15,031,"Write error handling guide",42,0.48,0.445,0.187,0.801,0.067,medium,california
+2025-01-15T12:50:42,032,"Generate sustainability report",85,0.72,0.934,0.392,1.681,0.140,high,california
+2025-01-15T13:00:18,033,"Explain attention mechanisms",32,0.65,0.456,0.192,0.821,0.068,medium,california
+2025-01-15T13:08:45,034,"Create CI/CD pipeline docs",55,0.58,0.567,0.238,1.021,0.085,medium,california
+2025-01-15T13:16:22,035,"Analyze energy consumption",42,0.55,0.478,0.201,0.860,0.072,medium,california
+2025-01-15T13:24:55,036,"Design data pipeline system",62,0.68,0.698,0.293,1.256,0.105,medium,california
+2025-01-15T13:33:28,037,"Write compliance documentation",72,0.62,0.756,0.318,1.361,0.113,high,california
+2025-01-15T13:42:15,038,"Generate model evaluation",48,0.58,0.512,0.215,0.922,0.077,medium,california
+2025-01-15T13:50:42,039,"Explain federated learning",35,0.62,0.445,0.187,0.801,0.067,medium,california
+2025-01-15T13:58:18,040,"Create monitoring dashboard",52,0.55,0.534,0.224,0.961,0.080,medium,california
+2025-01-15T14:06:45,041,"Analyze ML model fairness",45,0.68,0.567,0.238,1.021,0.085,medium,california
+2025-01-15T14:15:22,042,"Design caching strategy",38,0.52,0.434,0.182,0.781,0.065,medium,california
+2025-01-15T14:23:55,043,"Write API documentation",58,0.55,0.589,0.247,1.060,0.088,medium,california
+2025-01-15T14:32:28,044,"Generate training dataset",42,0.48,0.456,0.192,0.821,0.068,medium,california
+2025-01-15T14:40:15,045,"Explain embeddings concept",28,0.58,0.378,0.159,0.680,0.057,medium,california
+2025-01-15T14:48:42,046,"Create user onboarding flow",48,0.52,0.512,0.215,0.922,0.077,medium,california
+2025-01-15T14:56:18,047,"Analyze system bottlenecks",55,0.65,0.612,0.257,1.102,0.092,medium,california
+2025-01-15T15:04:45,048,"Design feature engineering",42,0.62,0.498,0.209,0.896,0.075,medium,california
+2025-01-15T15:12:22,049,"Write integration tests",38,0.45,0.412,0.173,0.742,0.062,medium,california
+2025-01-15T15:20:55,050,"Generate EU compliance report",92,0.78,1.123,0.472,2.021,0.168,high,california

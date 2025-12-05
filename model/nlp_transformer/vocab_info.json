@@ -1,0 +1,11 @@
+{
+  "base_vocab_size": 30522,
+  "special_tokens": [
+    "[PAD]",
+    "[UNK]",
+    "[CLS]",
+    "[SEP]",
+    "[MASK]"
+  ],
+  "max_position_embeddings": 512
+}
